@@ -1,0 +1,41 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "isolatedModules": false,
+        "jsx": "react",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "preserveConstEnums": true,
+        "outDir": "../dist",
+        "suppressImplicitAnyIndexErrors": true
+    },
+    "filesGlob": [
+        "**/*.ts",
+        "**/*.tsx",
+        "!node_modules/**"
+    ],
+    "compileOnSave": true,
+    "buildOnSave": false,
+    "atom": {
+        "rewriteTsconfig": true
+    },
+    "files": [
+        "actions.ts",
+        "atom-delve.ts",
+        "commands.ts",
+        "delve.ts",
+        "typings/atompromise.d.ts",
+        "typings/browser.d.ts",
+        "typings/browser/ambient/atom/atom.d.ts",
+        "typings/browser/ambient/node/node.d.ts",
+        "typings/main.d.ts",
+        "typings/main/ambient/atom/atom.d.ts",
+        "typings/main/ambient/node/node.d.ts"
+    ]
+}
