@@ -8,5 +8,5 @@
 # For more detailed documentation see
 # https://atom.io/docs/latest/behind-atom-keymaps-in-depth
 'atom-workspace atom-text-editor:not([mini])[data-grammar^="source go"]':
-  'f9': 'atom-delve:set-breakpoint'
-  'shift-f10': 'atom-delve:debug'
+  'f9': 'atom-delve:toggle-breakpoint'
+  'shift-f9': 'atom-delve:debug'

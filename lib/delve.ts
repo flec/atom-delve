@@ -20,22 +20,31 @@ export class Delve {
 
   constructor(dlv: AtomCore.IBufferedProcess) {
     this.dlv = dlv;
+    dlv.process.stdout.setEncoding('utf8');
   }
 
   public addOutputListener(stdout: (out: string) => void) {
     this.dlv.process.stdout.on('data', stdout);
   }
 
-  public help() {
-    this.write("help");
-  }
-
   public step() {
     this.write("step");
   }
 
+  public next() {
+    this.write("next");
+  }
+
   public continue() {
     this.write("continue");
+  }
+
+  public break(address: string) {
+    this.write("break " + address);
+  }
+
+  public locals() {
+    this.write("locals");
   }
 
   public exit() {

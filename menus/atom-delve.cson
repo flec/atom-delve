@@ -2,8 +2,8 @@
 'context-menu':
   'atom-text-editor': [
     {
-      'label': 'Set Breakpoint'
-      'command': 'atom-delve:setBreakpoint'
+      'label': 'Toggle Breakpoint'
+      'command': 'atom-delve:toggleBreakpoint'
     }
   ]
 'menu': [
@@ -13,8 +13,8 @@
       'label': 'atom-delve'
       'submenu': [
         {
-          'label': 'Set Breakpoint'
-          'command': 'atom-delve:setBreakpoint'
+          'label': 'Toggle Breakpoint'
+          'command': 'atom-delve:toggleBreakpoint'
         }
       ]
     ]

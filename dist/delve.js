@@ -18,18 +18,25 @@ exports.initDelve = initDelve;
 var Delve = (function () {
     function Delve(dlv) {
         this.dlv = dlv;
+        dlv.process.stdout.setEncoding('utf8');
     }
     Delve.prototype.addOutputListener = function (stdout) {
         this.dlv.process.stdout.on('data', stdout);
     };
-    Delve.prototype.help = function () {
-        this.write("help");
-    };
     Delve.prototype.step = function () {
         this.write("step");
     };
+    Delve.prototype.next = function () {
+        this.write("next");
+    };
     Delve.prototype.continue = function () {
         this.write("continue");
+    };
+    Delve.prototype.break = function (address) {
+        this.write("break " + address);
+    };
+    Delve.prototype.locals = function () {
+        this.write("locals");
     };
     Delve.prototype.exit = function () {
         this.write("exit");
