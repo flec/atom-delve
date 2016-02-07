@@ -4,21 +4,24 @@
 // for a full listing of what's available.
 @import "ui-variables";
 .atom-delve {}
-atom-text-editor[data-grammar="source go"]::shadow .gutter .line-number {
-  padding-left: 1.5em;
-  &.atom-delve-breakpoint::before,
-  &.atom-delve-breakpoint-checked::before {
-    height: 0.5em;
-    width: 0.5em;
-    border-radius: 50%;
-    background-color: #DB1D1D;
-    content: "";
-    display: inline-block;
-    margin-left: -1em;
-    margin-right: 0.25em;
-    vertical-align: middle;
+atom-text-editor[data-grammar="source go"]::shadow {
+  .line {
+    &.atom-delve-active-line {
+      background: #0000FF;
+    }
   }
-  &.atom-delve-breakpoint-checked::before {
-    border: 2px solid #0a0;
+  .gutter .line-number {
+    padding-left: 1.5em;
+    &.atom-delve-breakpoint::before {
+      height: 0.5em;
+      width: 0.5em;
+      border-radius: 50%;
+      background-color: #DB1D1D;
+      content: "";
+      display: inline-block;
+      margin-left: -1em;
+      margin-right: 0.25em;
+      vertical-align: middle;
+    }
   }
 }

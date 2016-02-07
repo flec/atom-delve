@@ -1,9 +1,9 @@
 "use strict";
-var BreakpointEvent;
 (function (BreakpointEvent) {
     BreakpointEvent[BreakpointEvent["Add"] = 0] = "Add";
     BreakpointEvent[BreakpointEvent["Remove"] = 1] = "Remove";
-})(BreakpointEvent || (BreakpointEvent = {}));
+})(exports.BreakpointEvent || (exports.BreakpointEvent = {}));
+var BreakpointEvent = exports.BreakpointEvent;
 var Breakpoints = (function () {
     function Breakpoints() {
         this.breakpoints = {};

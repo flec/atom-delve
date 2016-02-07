@@ -30,6 +30,7 @@
         "atom-delve.ts",
         "breakpoints.ts",
         "commands.ts",
+        "debugger.ts",
         "delve.ts",
         "typings/atompromise.d.ts",
         "typings/browser.d.ts",

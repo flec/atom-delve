@@ -1,4 +1,4 @@
-enum BreakpointEvent { Add, Remove }
+export enum BreakpointEvent { Add, Remove }
 
 export class Breakpoints {
   private breakpoints: { [address: string]: AtomCore.IDisplayBufferMarker };

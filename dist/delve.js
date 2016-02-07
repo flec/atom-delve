@@ -53,6 +53,9 @@ var Delve = (function () {
     Delve.prototype.exit = function () {
         return this.schedule("exit");
     };
+    Delve.prototype.clear = function (breakpointId) {
+        return this.schedule("clear " + breakpointId);
+    };
     Delve.prototype.schedule = function (command) {
         var that = this;
         return new Promise(function (resolve) {

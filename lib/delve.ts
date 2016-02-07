@@ -63,6 +63,10 @@ export class Delve {
     return this.schedule("exit");
   }
 
+  public clear(breakpointId: number): Promise<string> {
+    return this.schedule("clear " + breakpointId);
+  }
+
   private schedule(command: string): Promise<string> {
     var that = this;
     return new Promise<string>(function(resolve) {
