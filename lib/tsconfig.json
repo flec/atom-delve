@@ -28,6 +28,7 @@
     "files": [
         "actions.ts",
         "atom-delve.ts",
+        "breakpoints.ts",
         "commands.ts",
         "delve.ts",
         "typings/atompromise.d.ts",

@@ -1,20 +1,11 @@
 import path = require('path')
 import delve = require('./delve');
+import bp = require('./breakpoints');
 
-var breakpoints: {[key:string]:AtomCore.IDisplayBufferMarker} = {};
+var breakpoints: bp.Breakpoints = new bp.Breakpoints();
 
 export function toggleBreakpoint() {
-  var editor = atom.workspace.getActiveTextEditor();
-  var row = editor.getCursorBufferPosition().row;
-  var key = editor.buffer.file.path + ":" + row;
-  if (breakpoints[key]) {
-    breakpoints[key].destroy();
-    delete breakpoints[key];
-  } else {
-    var marker = editor.markBufferRange([[row, 0], [row, 0]], {invalidate: 'never'})
-    var decoration = editor.decorateMarker(marker, { type: 'line-number', class: "atom-delve-breakpoint" })
-    breakpoints[key] = marker;
-  }
+  breakpoints.toggle();
 }
 
 export function debug() {

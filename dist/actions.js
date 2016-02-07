@@ -1,20 +1,10 @@
 "use strict";
 var path = require('path');
 var delve = require('./delve');
-var breakpoints = {};
+var bp = require('./breakpoints');
+var breakpoints = new bp.Breakpoints();
 function toggleBreakpoint() {
-    var editor = atom.workspace.getActiveTextEditor();
-    var row = editor.getCursorBufferPosition().row;
-    var key = editor.buffer.file.path + ":" + row;
-    if (breakpoints[key]) {
-        breakpoints[key].destroy();
-        delete breakpoints[key];
-    }
-    else {
-        var marker = editor.markBufferRange([[row, 0], [row, 0]], { invalidate: 'never' });
-        var decoration = editor.decorateMarker(marker, { type: 'line-number', class: "atom-delve-breakpoint" });
-        breakpoints[key] = marker;
-    }
+    breakpoints.toggle();
 }
 exports.toggleBreakpoint = toggleBreakpoint;
 function debug() {
