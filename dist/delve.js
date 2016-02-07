@@ -1,6 +1,7 @@
 "use strict";
 var _atom = require('atom');
 function initDelve(mainPath) {
+    var ready = false;
     return new Promise(function (resolve) {
         var dlv = new _atom.BufferedProcess({
             command: process.env.GOPATH + "/bin/dlv",
@@ -9,7 +10,10 @@ function initDelve(mainPath) {
                 'cwd': mainPath
             },
             stdout: function (output) {
-                resolve(new Delve(dlv));
+                if (!ready) {
+                    ready = true;
+                    resolve(new Delve(dlv));
+                }
             }
         });
     });
@@ -17,32 +21,52 @@ function initDelve(mainPath) {
 exports.initDelve = initDelve;
 var Delve = (function () {
     function Delve(dlv) {
+        this.commandQueue = [];
+        this.promiseResolverQueue = [];
+        var that = this;
         this.dlv = dlv;
         dlv.process.stdout.setEncoding('utf8');
+        this.dlv.process.stdout.on('data', function (output) {
+            that.outputBuffer += output;
+            if (output.lastIndexOf("(dlv) ") == output.length - 6) {
+                that.promiseResolverQueue.shift()(that.outputBuffer);
+                that.outputBuffer = "";
+                that.executeNext();
+            }
+        });
     }
-    Delve.prototype.addOutputListener = function (stdout) {
-        this.dlv.process.stdout.on('data', stdout);
-    };
     Delve.prototype.step = function () {
-        this.write("step");
+        return this.schedule("step");
     };
     Delve.prototype.next = function () {
-        this.write("next");
+        return this.schedule("next");
     };
     Delve.prototype.continue = function () {
-        this.write("continue");
+        return this.schedule("continue");
     };
     Delve.prototype.break = function (address) {
-        this.write("break " + address);
+        return this.schedule("break " + address);
     };
     Delve.prototype.locals = function () {
-        this.write("locals");
+        return this.schedule("locals");
     };
     Delve.prototype.exit = function () {
-        this.write("exit");
+        return this.schedule("exit");
     };
-    Delve.prototype.write = function (command) {
-        this.dlv.process.stdin.write(command + "\n");
+    Delve.prototype.schedule = function (command) {
+        var that = this;
+        return new Promise(function (resolve) {
+            that.commandQueue.push(command);
+            that.promiseResolverQueue.push(resolve);
+            if (that.promiseResolverQueue.length == 1) {
+                that.executeNext();
+            }
+        });
+    };
+    Delve.prototype.executeNext = function () {
+        if (this.commandQueue.length > 0) {
+            this.dlv.process.stdin.write(this.commandQueue.shift() + "\n");
+        }
     };
     return Delve;
 }());

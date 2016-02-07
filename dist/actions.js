@@ -20,14 +20,14 @@ exports.toggleBreakpoint = toggleBreakpoint;
 function debug() {
     var editor = atom.workspace.getActiveTextEditor();
     delve.initDelve(path.dirname(editor.buffer.file.path)).then(function (dlv) {
-        dlv.addOutputListener(function (out) {
-            console.log(out);
-        });
-        dlv.break("main.main");
-        dlv.continue();
-        dlv.next();
-        dlv.locals();
-        dlv.exit();
+        var outputHandler = function (output) {
+            console.log(output);
+        };
+        dlv.break("main.main").then(outputHandler);
+        dlv.continue().then(outputHandler);
+        dlv.next().then(outputHandler);
+        dlv.locals().then(outputHandler);
+        dlv.exit().then(outputHandler);
     });
 }
 exports.debug = debug;

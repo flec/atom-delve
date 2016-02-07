@@ -13,21 +13,21 @@ export function toggleBreakpoint() {
   } else {
     var marker = editor.markBufferRange([[row, 0], [row, 0]], {invalidate: 'never'})
     var decoration = editor.decorateMarker(marker, { type: 'line-number', class: "atom-delve-breakpoint" })
-    breakpoints[key] = marker;  
+    breakpoints[key] = marker;
   }
 }
 
 export function debug() {
   var editor = atom.workspace.getActiveTextEditor()
   delve.initDelve(path.dirname(editor.buffer.file.path)).then(function(dlv: delve.Delve) {
-    dlv.addOutputListener(function(out) {
-      console.log(out);
-    });
-    dlv.break("main.main")
-    dlv.continue();
-    dlv.next();
-    dlv.locals();
-    dlv.exit();
+    var outputHandler = function(output) {
+      console.log(output);
+    };
+    dlv.break("main.main").then(outputHandler);
+    dlv.continue().then(outputHandler);
+    dlv.next().then(outputHandler);
+    dlv.locals().then(outputHandler);
+    dlv.exit().then(outputHandler);
   });
 
 }
