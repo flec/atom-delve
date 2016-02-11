@@ -34,3 +34,10 @@ function next() {
     }
 }
 exports.next = next;
+function exit() {
+    if (dbgr) {
+        dbgr.exit();
+        dbgr = undefined;
+    }
+}
+exports.exit = exit;

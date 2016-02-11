@@ -44,6 +44,10 @@ var Debugger = (function () {
             that.handlePositionOutput(result);
         });
     };
+    Debugger.prototype.exit = function () {
+        this.removeActiveLine();
+        this.delve.exit();
+    };
     Debugger.prototype.setBreakpoint = function (address) {
         var that = this;
         this.delve.break(address).then(function (result) {
@@ -68,7 +72,7 @@ var Debugger = (function () {
             this.activateLine(path, parseInt(addressParts[2], 10));
         }
         else {
-            this.removeActiveLine();
+            this.exit();
         }
     };
     Debugger.prototype.activateLine = function (path, line) {

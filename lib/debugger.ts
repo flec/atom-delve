@@ -51,6 +51,11 @@ export class Debugger {
     });
   }
 
+  public exit() {
+    this.removeActiveLine();
+    this.delve.exit();
+  }
+
   public setBreakpoint(address: string) {
     var that = this;
     this.delve.break(address).then(function(result: string) {
@@ -75,7 +80,7 @@ export class Debugger {
       }
       this.activateLine(path, parseInt(addressParts[2], 10));
     } else {
-      this.removeActiveLine();
+      this.exit();
     }
   }
 

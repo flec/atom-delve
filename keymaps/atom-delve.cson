@@ -10,6 +10,7 @@
 'atom-workspace atom-text-editor:not([mini])[data-grammar^="source go"], atom-workspace atom-text-editor:not([mini])[data-atom-delve^="asm"]':
   'shift-f8': 'atom-delve:toggle-breakpoint'
   'shift-f9': 'atom-delve:debug'
+  'shift-f7': 'atom-delve:exit'
   'f7': 'atom-delve:step'
   'f8': 'atom-delve:next'
   'f9': 'atom-delve:continue'

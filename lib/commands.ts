@@ -6,4 +6,5 @@ export function registerCommands() {
   atom.commands.add('atom-workspace', 'atom-delve:continue', actions.cont);
   atom.commands.add('atom-workspace', 'atom-delve:next', actions.next);
   atom.commands.add('atom-workspace', 'atom-delve:step', actions.step);
+  atom.commands.add('atom-workspace', 'atom-delve:exit', actions.exit);
 }
