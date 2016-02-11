@@ -14,7 +14,7 @@ export class Breakpoints {
   public toggle(): void {
     var editor = atom.workspace.getActiveTextEditor();
     var row = editor.getCursorBufferPosition().row;
-    var key = editor.buffer.file.path + ":" + row;
+    var key = editor.buffer.file.path + ":" + (row + 1);
     if (this.breakpoints[key]) {
       this.breakpoints[key].destroy();
       delete this.breakpoints[key];

@@ -75,7 +75,7 @@ export class Debugger {
     var addressParts = output.match(/\>\s.+?\)\s(.*?):(\d+)/);
     if (addressParts) {
       var path = addressParts[1];
-      if (path.charAt(0) == "."){
+      if (path.charAt(0) == ".") {
         path = this.mainPath + path.substr(1);
       }
       this.activateLine(path, parseInt(addressParts[2], 10));
@@ -86,13 +86,14 @@ export class Debugger {
 
   private activateLine(path: string, line: number) {
     var that = this;
-    atom.workspace.open(path, {initialLine:line}).then(function() {
+    var row = line - 1;
+    atom.workspace.open(path, { initialLine: row }).then(function() {
       var editor = atom.workspace.getActiveTextEditor();
       if (path.slice(-2) == ".s") {
         atom.views.getView(editor).setAttribute("data-atom-delve", "asm");
       }
       that.removeActiveLine();
-      that.activeLine = editor.markBufferRange([[line, 0], [line, 0]], { invalidate: 'never' });
+      that.activeLine = editor.markBufferRange([[row, 0], [row, 0]], { invalidate: 'never' });
       editor.decorateMarker(that.activeLine, { type: 'line', class: "atom-delve-active-line" });
     });
   }
