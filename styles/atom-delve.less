@@ -4,7 +4,9 @@
 // for a full listing of what's available.
 @import "ui-variables";
 .atom-delve {}
-atom-text-editor[data-grammar="source go"]::shadow {
+atom-text-editor[data-grammar="source go"]::shadow,
+atom-text-editor[data-atom-delve="asm"]::shadow,
+ {
   .line {
     &.atom-delve-active-line {
       background: #0000FF;

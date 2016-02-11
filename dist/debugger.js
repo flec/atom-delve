@@ -75,6 +75,9 @@ var Debugger = (function () {
         var that = this;
         atom.workspace.open(path, { initialLine: line }).then(function () {
             var editor = atom.workspace.getActiveTextEditor();
+            if (path.slice(-2) == ".s") {
+                atom.views.getView(editor).setAttribute("data-atom-delve", "asm");
+            }
             that.removeActiveLine();
             that.activeLine = editor.markBufferRange([[line, 0], [line, 0]], { invalidate: 'never' });
             editor.decorateMarker(that.activeLine, { type: 'line', class: "atom-delve-active-line" });
