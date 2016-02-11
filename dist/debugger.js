@@ -29,8 +29,19 @@ var Debugger = (function () {
     Debugger.prototype.continue = function () {
         var that = this;
         this.delve.continue().then(function (result) {
-            var addressParts = result.match(/\.(\/.*?):(\d+)/);
-            that.activateLine(addressParts[1], parseInt(addressParts[2], 10));
+            that.handlePositionOutput(result);
+        });
+    };
+    Debugger.prototype.step = function () {
+        var that = this;
+        this.delve.step().then(function (result) {
+            that.handlePositionOutput(result);
+        });
+    };
+    Debugger.prototype.next = function () {
+        var that = this;
+        this.delve.next().then(function (result) {
+            that.handlePositionOutput(result);
         });
     };
     Debugger.prototype.setBreakpoint = function (address) {
@@ -47,14 +58,32 @@ var Debugger = (function () {
             throw new Error("breakpoint not found");
         }
     };
-    Debugger.prototype.activateLine = function (relPath, line) {
+    Debugger.prototype.handlePositionOutput = function (output) {
+        var addressParts = output.match(/\>\s.+?\)\s(.*?):(\d+)/);
+        if (addressParts) {
+            var path = addressParts[1];
+            if (path.charAt(0) == ".") {
+                path = this.mainPath + path.substr(1);
+            }
+            this.activateLine(path, parseInt(addressParts[2], 10));
+        }
+        else {
+            this.removeActiveLine();
+        }
+    };
+    Debugger.prototype.activateLine = function (path, line) {
         var that = this;
-        var address = this.mainPath + relPath;
-        atom.workspace.open(address, {}).then(function () {
+        atom.workspace.open(path, { initialLine: line }).then(function () {
             var editor = atom.workspace.getActiveTextEditor();
+            that.removeActiveLine();
             that.activeLine = editor.markBufferRange([[line, 0], [line, 0]], { invalidate: 'never' });
-            var decoration = editor.decorateMarker(that.activeLine, { type: 'line', class: "atom-delve-active-line" });
+            editor.decorateMarker(that.activeLine, { type: 'line', class: "atom-delve-active-line" });
         });
+    };
+    Debugger.prototype.removeActiveLine = function () {
+        if (this.activeLine) {
+            this.activeLine.destroy();
+        }
     };
     return Debugger;
 }());

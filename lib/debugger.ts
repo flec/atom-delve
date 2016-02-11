@@ -33,8 +33,21 @@ export class Debugger {
   public continue() {
     var that = this;
     this.delve.continue().then(function(result: string) {
-      var addressParts = result.match(/\.(\/.*?):(\d+)/);
-      that.activateLine(addressParts[1], parseInt(addressParts[2], 10));
+      that.handlePositionOutput(result);
+    });
+  }
+
+  public step() {
+    var that = this;
+    this.delve.step().then(function(result: string) {
+      that.handlePositionOutput(result);
+    });
+  }
+
+  public next() {
+    var that = this;
+    this.delve.next().then(function(result: string) {
+      that.handlePositionOutput(result);
     });
   }
 
@@ -53,13 +66,32 @@ export class Debugger {
     }
   }
 
-  private activateLine(relPath: string, line: number) {
+  private handlePositionOutput(output: string) {
+    var addressParts = output.match(/\>\s.+?\)\s(.*?):(\d+)/);
+    if (addressParts) {
+      var path = addressParts[1];
+      if (path.charAt(0) == "."){
+        path = this.mainPath + path.substr(1);
+      }
+      this.activateLine(path, parseInt(addressParts[2], 10));
+    } else {
+      this.removeActiveLine();
+    }
+  }
+
+  private activateLine(path: string, line: number) {
     var that = this;
-    var address = this.mainPath + relPath;
-    atom.workspace.open(address, {}).then(function() {
+    atom.workspace.open(path, {initialLine:line}).then(function() {
       var editor = atom.workspace.getActiveTextEditor();
+      that.removeActiveLine();
       that.activeLine = editor.markBufferRange([[line, 0], [line, 0]], { invalidate: 'never' });
-      var decoration = editor.decorateMarker(that.activeLine, { type: 'line', class: "atom-delve-active-line" });
+      editor.decorateMarker(that.activeLine, { type: 'line', class: "atom-delve-active-line" });
     });
+  }
+
+  private removeActiveLine() {
+    if (this.activeLine) {
+      this.activeLine.destroy();
+    }
   }
 }
